@@ -1,0 +1,141 @@
+<div class="navbar navbar-inverse">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Juke</a>
+    </div>
+    <div class="navbar-collapse collapse navbar-inverse-collapse">
+      <ul class="nav navbar-nav navbar-right">
+	<li style="font-size: 18px; padding-top: 9.5px; padding-bottom: 9.5px; padding-left: 15px; line-height: 21px;">Hi, {{currentUser.get('username')}}</li>
+        <li><a style="font-size: 18px;" href="#">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="page-header" style="margin-top: 5px">
+    <div class="row">
+      <div align="center">
+	<h1>{{hub.get('title')}}</h1>
+      </div>
+    </div>
+  </div>
+  
+  <div class="flex-video widescreen" style="margin: 0 auto; text-align: center" >
+    <div id="ytapiplayer">
+      <p>Error- Update Yo Flash.</p>
+    </div>
+  </div>
+  
+  <br>
+
+  <div>
+    <ul class="nav nav-tabs" style="margin-bottom: 15px;">
+      <li class="active" ng-model="currentView" btn-radio="'PlayList'"><a data-toggle="currentView">Current Playlist</a></li>
+      <li ng-model="currentView" btn-radio="'Recent'" ng-click="getQueuedSongs()"><a data-toggle="currentView">Recently Played</a></li>
+      <li ng-model="currentView" btn-radio="'Users'"><a data-toggle="currentView">Current Users</a></li>
+      <li ng-model="currentView" btn-radio="'Add'" class="navbar-right"><a data-toggle="currentView">Add a Song</a></li>
+    </ul>
+  </div>
+
+  <div align="center" class="table-responsive" ng-show="currentView == 'PlayList'">
+    <h2>Current Playlist</h2>
+    <table ng-table="tableParams" class="table" style="">
+      <thead>
+        <tr>
+          <th>Score</th>
+          <th>Thumbnail</th>
+          <th>Title</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="queuedSong in queuedSongs">
+          <td data-title="'Score'" class="col-sm-1">{{queuedSong.get('score')}}</td>
+          <td data-title="'Thumbnail'" class="col-sm-1"><img src="{{queuedSong.get('song').get('thumbnail')}}"/></td>
+          <td data-title="'Title'">{{queuedSong.get('song').get('title')}}</td>
+          <td data-title="'Description'">{{queuedSong.get('song').get('description')}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div align="center" class="table-responsive" ng-show="currentView == 'Recent'">
+    <h2>Recently Played</h2>
+    <table ng-table="tableParams" class="table" style="">
+      <thead>
+        <tr>
+          <th>Position</th>
+          <th>Points</th>
+          <th>Title</th>
+          <th>Artist</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="queuedSong in queuedSongs">
+          <td data-title="'Position'" class="col-sm-1">{{queuedSong.get('position')}}</td>
+          <td data-title="'Points'" class="col-sm-1">{{queuedSong.get('points')}}</td>
+          <td data-title="'Title'">{{queuedSong.get('song').get('title')}}</td>
+          <td data-title="'Artist'">{{queuedSong.get('song').get('artist')}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div align="center" class="table-responsive" ng-show="currentView == 'Users'">
+    <h2>Current Users</h2>
+    <table ng-table="tableParams" class="table" style="">
+      <thead>
+        <tr>
+          <th>Points</th>
+          <th>Title</th>
+          <th>Artist</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="queuedSong in queuedSongs">
+          <td data-title="'Points'" class="col-sm-1">{{queuedSong.get('points')}}</td>
+          <td data-title="'Title'">{{queuedSong.get('song').get('title')}}</td>
+          <td data-title="'Artist'">{{queuedSong.get('song').get('artist')}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div align="center" ng-show="currentView == 'Add'">
+    <div class="row">
+	<h2>Add a Song</h2>
+	<form>
+	  <div class="col-lg-8">
+	    <input ng-model="searchParam" type="text" class="form-control" placeholder="Search"/>
+	  </div>
+	  <button type="submit" ng-click="getVideos()" class="btn btn-default">Search</button>
+	</form>
+    </div>
+    <table ng-table="tableParams" class="table" style="">
+      <thead>
+        <tr>
+          <th>Pic</th>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Add</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="result in searchResults">
+          <td data-title="'Pic'" class="col-sm-1"><img src="{{result.snippet.thumbnails.default.url}}"></td>
+          <td data-title="'Title'">{{result.snippet.title}}</td>
+          <td data-title="'Description'">{{result.snippet.description}}</td>
+          <td data-title="'Add'"><button class="btn btn-primary" ng-click="addSong(result)">Add</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+</div>

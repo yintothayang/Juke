@@ -1,0 +1,51 @@
+'use strict';
+
+var jukeApp = angular.module('jukeApp', [
+    'ngRoute',
+    'jukeServices',
+    'jukeFilters',
+    'ui.bootstrap'
+]).
+    factory('JukeStorage', ['$rootScope', function($rootScope) {
+	var User = Parse.Object.extend("User");
+	var service = {
+	    
+	    model: {
+		currentUser: {},
+		currentHub: {}
+	    },
+	    
+            SaveState: function () {
+		sessionStorage.userService = angular.toJson(service.model);
+            },
+	    
+            RestoreState: function () {
+		service.model = angular.fromJson(sessionStorage.JukeStorage);
+            }
+	}
+	
+	$rootScope.$on("savestate", service.SaveState);
+	$rootScope.$on("restorestate", service.RestoreState);
+	
+	return service;
+    }]).
+    config(['$routeProvider', 
+	    function($routeProvider) {
+		$routeProvider.
+		    when('/', {
+			templateUrl: 'partials/homeView.html',
+			controller: LoginCtrl}).
+		    when('/hubs', {
+			templateUrl: 'partials/hubsListView.html',
+			controller: HubCtrl}).
+		    when('/hubs/:hubId', {
+			templateUrl: 'partials/hubView.html',
+			controller: HubCtrl}).
+		    when('/player/:hubId', {
+			templateUrl: 'partials/playerView.html',
+			controller: PlayerCtrl}).
+		    otherwise({redirectTo: '/'});
+	    }]);
+ 
+
+

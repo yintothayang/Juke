@@ -1,0 +1,58 @@
+<div class="navbar navbar-inverse">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Juke</a>
+    </div>
+    <div class="navbar-collapse collapse navbar-inverse-collapse">
+      <ul class="nav navbar-nav navbar-right">
+	<li style="font-size: 18px; padding-top: 9.5px; padding-bottom: 9.5px; padding-left: 15px; line-height: 21px;">Hi, {{currentUser.get('username')}}</li>
+        <li><a style="font-size: 18px;" href="#">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="page-header">
+    <h1>Hubs</h1>
+  </div>
+  <div class="row">
+    <div class="col-xs-6">
+      <label for="query">Search:</label>
+      <input type="text" ng-model="query" class="form-control col-sm-3" placeholder="Search" id="query">
+    </div>
+    <div class="col-xs-6">
+      <label for="createHubButton">New Hub:</label><br>
+      <button type="button" class="btn btn-primary" id="createHubButton" ng-click="open()">Create New Hub</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="table-responsive">
+      <table ng-table="tableParams" class="table table-striped table-hover">
+	<thead>
+	  <tr>
+	    <th>Name</th>
+	    <th>Owner</th>
+	    <th>Location</th>
+	    <th>Public</th>
+	    <th>Connect</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  <tr ng-repeat="hub in hubs | filter:query" ng-click="connectToHub(hub)">
+	    <td><h4>{{hub.get('title')}}</h4></td>
+	    <td><button class="btn btn-default" ng-click="viewUser(hub.get('owner').id)">{{hub.get('owner').get('username')}}</button></td>
+	    <td>{{hub.get('location')}}</td>
+	    <td>{{hub.get('public')}}</td>
+	    <td><button type="button" class="btn btn-success" ng-click="connectToHub(hub)">Connect</button></td>
+	  </tr>
+	</tbody>
+      </table>
+    </div>
+  </div>
+</div>

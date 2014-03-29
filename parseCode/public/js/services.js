@@ -136,22 +136,34 @@ angular.module('jukeServices', ['ngResource'])
 		});
 	    },
 	    
-	    //get a hub's queuedSongs
-	    deleteSong : function deleteSong(queuedSong, callback){
-		var promise = queuedSong[0].destroy({
-		    success: function(result){
-			callback(result);
+	    //Remove a song from the current playlist
+	    removeSong : function removeSong(queuedSongId){
+		return Parse.Cloud.run('removeSong', {'queuedSongId' : queuedSongId}, {
+		    success: function(){
+
 		    },
-		    error: function(object, error){
+		    error: function(error){
 			alert("Error: " + error.message);
 		    }
 		});
-		return promise;
 	    },
 
-	    //get a hub's queuedSongs
-	    getQueuedSongs : function getQueuedSongsById(id, callback){
-		var promise = Parse.Cloud.run('getQueuedSongsByHubId', {'hubId': id}, {
+	    //Vote on a Song
+	    vote : function vote(userId, queuedSongId, vote){
+		return Parse.Cloud.run('vote', {'vote' : vote, 'userId' : userId, 'queuedSongId' : queuedSongId},{
+		    success: function(){
+
+		    },
+		    error: function(error){
+			alert("Error: " + error.message);
+		    }
+		});
+	    },
+
+
+	    //Get the Current Playlist
+	    getPlaylist : function getPlaylist(hubId, callback){
+		return	Parse.Cloud.run('getPlaylist', {'hubId' : hubId}, {
 		    success: function(results){
 			callback(results);
 		    },
@@ -159,23 +171,21 @@ angular.module('jukeServices', ['ngResource'])
 			alert("Error: " + error.message);
 		    }
 		});
-		return promise;
+	    },
+
+	    //Get Recently Played Songs
+	    getRecentlyPlayed : function getRecentlyPlayed(hubId, callback){
+		Parse.Cloud.run('getRecentlyPlayed', {'hubId' : hubId}, {
+		    success: function(results){
+			callback(results);
+		    },
+		    error: function(error){
+			alert("Error: " + error.message);
+		    }
+		});
 	    }
+
+
 	};
 	return ParseService;
-    }).factory('playerService', function ($window, $rootScope, $q) {
-	$window.onYouTubePlayerReady = function (id) {
-            $rootScope.$broadcast("PLAYERLOADED", id);
-	}
-	return {
-            create: function (playerId) {
-		var d = $q.defer();
-		var videoID = "S7cQ3b0iqLo";
-		var params = { allowScriptAccess: "always" };
-		var atts = { id: playerId };
-		swfobject.embedSWF("http://www.youtube.com/v/" + videoID + "?version=3&enablejsapi=1&playerapiid=" + playerId,
-				   "ytapiplayer", "425", "356", "9", null, null, params, atts);
-		return d;
-            }
-	}
     });

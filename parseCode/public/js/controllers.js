@@ -1,5 +1,8 @@
 'use strict';
 
+
+
+
 //Player Controller
 var PlayerCtrl = function($scope, $location, ParseService, playerService, $http, $q, $timeout, $window){
     //Get Hub by objectId
@@ -325,10 +328,8 @@ var HubCtrl = function($rootScope, $scope, $location, $modal, $log, $http, $q, $
     //Did current User vote on a song?
     $scope.didVote = function(queuedSong, type){
 	if($.inArray($scope.currentUser.id, queuedSong.get(type)) > -1){
-	    console.log('true');
 	    return true;
 	} else {
-	    console.log('false');
 	    return false;
 	}
     }
@@ -341,7 +342,7 @@ var HubCtrl = function($rootScope, $scope, $location, $modal, $log, $http, $q, $
 	$scope.hub = {};
 
 	var modalInstance = $modal.open({
-	    templateUrl: 'partials/createHubModal.html',
+	    templateUrl: 'partials/modal.html',
 	    controller: ModalCtrl,
 	    resolve: {
 		hub: function(){
@@ -362,7 +363,6 @@ var HubCtrl = function($rootScope, $scope, $location, $modal, $log, $http, $q, $
     $scope.getHubs = function(){
 	ParseService.getHubs(function(results){
 	    $scope.$apply(function(){
-		console.log(results);
 		$scope.hubs = results;
 	    });
 	});
@@ -433,7 +433,7 @@ var LoginCtrl = function($scope, $location, ParseService){
     $scope.signUp = function(){
 	ParseService.signUp($scope.signUp_username, $scope.signUp_password, function(user){
 	    if(user != undefined){
-		$location.path('/hubs');
+		$location.path('/home');
 		$scope.$apply();
 	    }
 	});
@@ -445,7 +445,7 @@ var LoginCtrl = function($scope, $location, ParseService){
 	var password = $scope.login.password;
 	ParseService.login(username, password, function(user){
 	    if(user != undefined){
-		$location.path('/hubs');
+		$location.path('/home');
 		$scope.$apply();
 	    }
 	});

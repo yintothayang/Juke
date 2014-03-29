@@ -10,8 +10,14 @@ config(['$routeProvider',
 	function($routeProvider) {
 	    $routeProvider.
 		when('/', {
-		    templateUrl: 'partials/homeView.html',
+		    templateUrl: 'partials/loginView.html',
 		    controller: LoginCtrl}).
+		when('/about', {
+		    templateUrl: 'partials/aboutView.html',
+		    controller: LoginCtrl}).
+		when('/home', {
+		    templateUrl: 'partials/homeView.html',
+		    controller: HomeCtrl}).
 		when('/hubs', {
 		    templateUrl: 'partials/hubsListView.html',
 		    controller: HubCtrl}).

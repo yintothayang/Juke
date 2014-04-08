@@ -21,7 +21,7 @@ Parse.Cloud.define("getPlaylist", function(request, response) {
 			var currentlyPlaying = results[0];
 			results.shift();
 			if(results.length > 0){
-			    var hubDate = results[0].get('hub').createdAt.getTime(); 
+			    var hubDate = results[0].get('hub').createdAt.getTime();
 			    var songs = [];
 			    results.forEach(function(song){
 				var ups = song.get('ups').length;
@@ -36,7 +36,7 @@ Parse.Cloud.define("getPlaylist", function(request, response) {
 				} else {
 				    sign = 0;
 				}
-				
+
 				var seconds = (song.createdAt.getTime() ) - hubDate;
 				var position = s;
 				song.set('position', position);
@@ -44,8 +44,9 @@ Parse.Cloud.define("getPlaylist", function(request, response) {
 			    });
 			    results.sort(compare);
 			    results.unshift(currentlyPlaying);
+			} else {
+			    results.push(currentlyPlaying);
 			}
-
 			Parse.Object.saveAll(results, {
 			    success: function(results){
 				response.success(results);
@@ -64,7 +65,7 @@ Parse.Cloud.define("getPlaylist", function(request, response) {
 		    response.error("Error :" + error.message);
 		}
 	    });
-	}, 
+	},
 	error: function(object, error){
 	    response.error("Error :" + error.message);
 	}
@@ -124,8 +125,8 @@ Parse.Cloud.define("vote", function(request, response) {
     var userId = request.params.userId;
     var queuedSongId = request.params.queuedSongId;
     var vote = request.params.vote;
-    
-    
+
+
     var query = new Parse.Query(QueuedSong);
     query.get(queuedSongId, {
 	success: function(queuedSong){
@@ -193,19 +194,86 @@ Parse.Cloud.define("createHub", function(request, response) {
 });
 
 //Add Song to Queue
-//request params - user(User), 
+//request params - user(User), hub (Hub), song(Song)
 Parse.Cloud.define("addSong", function(request, response) {
-    //First Check if User is allowed to add a song
-    
+    var hubId =  request.params.hubId;
+    var userId = request.params.userId;
+    var submittedSong = request.params.song;
+    var hub = {};
+    var user = {};
 
 
+    //First get the hub and the user
+    var hubQuery = new Parse.Query(Hub);
+    var hubPromise = hubQuery.get(hubId, {
+        success: function(result){
+            var user = result;
+        },
+        error: function(error){
+            response.error(error);
+        }
+    });
 
+    var userQuery = new Parse.Query(User);
+    var userPromise = userQuery.get(userId, {
+        success: function(result){
+            var hub = result;
+        },
+        error: function(error){
+            response.error(error);
+        }
+    });
+
+    var promises = [userPromise, hubPromise];
+    Parse.Promise.when(promises).then(function(results){
+        //First Check if User is allowed to add a song
+        if(addCheck(hub, user, song)){
+            var song = new Song();
+            song.set('artist',submittedSong.artist);
+            song.set('description',submittedSong.description);
+            song.set('thumbnail',submittedSong.thumbnail);
+            song.set('type',submittedSong.type);
+            song.set('pId',submittedSong.pId);
+            song.set('url',submittedSong.url);
+            song.set('owner', user);
+            song.set('hub', hub);
+            song.save({
+                success: function(song){
+	            var queuedSong = new QueuedSong();
+	            queuedSong.set('hub', hub);
+	            queuedSong.set('song', song);
+	            queuedSong.set('addedBy', user);
+	            queuedSong.set('score', 1);
+	            queuedSong.set('ups', [user.id]);
+	            queuedSong.set('downs', []);
+	            queuedSong.set('active', true);
+
+	            queuedSong.save({
+	                success: function(result){
+                            response.success();
+	                },
+	                error: function(object, error){
+                            response.error(error);
+	                }
+	            });
+                },
+                error: function(object, error){
+                    response.error(error);
+                }
+            });
+        }
+    });
 });
 
+var addCheck = function(hub, user, song){
+    var valid = true;
+    return valid;
+}
 
 
-/**  
- *  
+
+/**
+ *
  *  stuff for the iPhone app
  *
  *
@@ -225,7 +293,7 @@ Parse.Cloud.afterDelete("Hub", function(request) {
                     console.error("Error deleting related comments " + error.code + ": " + error.message);
                 }
             });
-            
+
         },
         error: function(error) {
             console.error("Error finding related comments " + error.code + ": " + error.message);
@@ -250,8 +318,8 @@ Parse.Cloud.define("ytUrl", function(req, res) {
 
 
 
-/**  
- *  
+/**
+ *
  *  Future oauth token swap stuff
  *
  *
@@ -264,7 +332,7 @@ var kClientCallbackURL = "spotify-ios-sdk-beta://callback"
 var _ = require('underscore');
 var express = require('express');
 var app = express();
- 
+
 // Global app configuration section
 app.use(express.bodyParser());  // Populate req.body
 
@@ -274,7 +342,7 @@ app.use(express.bodyParser());  // Populate req.body
  *   for an access token.
  */
 var getSpotifyAccessToken = function(code) {
-    
+
     var json = {
         grant_type      :   'authorization_code' ,
         client_id       :   kClientId,
@@ -297,9 +365,9 @@ app.post('/swap',function(req,res){
 //    res.send(reg.params);
     console.log('post to /swap');
     console.log(req.body.code);
-    
+
     var response = getSpotifyAccessToken(req.body.code);
-    
+
     response.then(function(obj){
 //        console.log(obj);
         res.send(obj.data);

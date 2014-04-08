@@ -10,7 +10,7 @@ angular.module('jukeServices', ['ngResource'])
 
 	//Cash current Queued Songs
 	var queuedSongs = [];
-	
+
 	//Cash current Hub
 	var currentHub;
 
@@ -135,7 +135,19 @@ angular.module('jukeServices', ['ngResource'])
 		    }
 		});
 	    },
-	    
+
+	    //Remove a song from the current playlist
+	    addSong : function addSong(userId, hubId, song){
+		return Parse.Cloud.run('addSong', {'userId' : 'userId', 'hubId' : 'hubId', 'song' : 'song'}, {
+		    success: function(result){
+                        alert("Song successfully added");
+		    },
+		    error: function(error){
+			alert("Error: " + error.message);
+		    }
+		});
+	    },
+
 	    //Remove a song from the current playlist
 	    removeSong : function removeSong(queuedSongId){
 		return Parse.Cloud.run('removeSong', {'queuedSongId' : queuedSongId}, {

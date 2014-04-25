@@ -44,7 +44,7 @@
     </div>
   </div>
 
-  <div class="well">  
+  <div class="well">
     <div ng-show="currentView == 'PlayList'">
       <div class="row">
 	<div align="center">
@@ -67,6 +67,7 @@
 		<th>Score</th>
 		<th>Thumbnail</th>
 		<th>Title</th>
+		<th>Added By</th>
 	      </tr>
 	    </thead>
 	    <tbody>
@@ -90,18 +91,19 @@
 		</td>
 		<td data-title="'Thumbnail'"><img src="{{queuedSong.get('song').get('thumbnail')}}"/></td>
 		<td data-title="'Title'">{{queuedSong.get('song').get('title')}}</td>
+		<td data-title="'Added By'">{{queuedSong.get('addedBy').get('username').substr(0, 25)}}</td>
 	      </tr>
 	    </tbody>
 	  </table>
 	</div>
       </div>
     </div>
-    
+
     <div align="center" class="table-responsive" ng-show="currentView == 'Recent'">
       <h3>Recently Played</h3>
       <div>
 	<ul class="nav nav-tabs" style="margin-bottom: 15px;">
-	  <li class="active" ng-model="currentView" btn-radio="'PlayList'"><a data-toggle="currentView">Current Playlist</a></li>
+	  <li class="active" ng-model="currentView" btn-radio="'PlayList'" ng-click="getPlaylist()"><a data-toggle="currentView">Current Playlist</a></li>
 	  <li ng-model="currentView" btn-radio="'Recent'" ng-click="getQueuedSongs()"><a data-toggle="currentView">Recently Played</a></li>
 	  <li ng-model="currentView" btn-radio="'Add'" class="navbar-right"><a data-toggle="currentView">Add a Song</a></li>
 	</ul>
@@ -131,12 +133,12 @@
 	<h3>Add a Song</h3>
 	<div>
 	  <ul class="nav nav-tabs" style="margin-bottom: 15px;">
-	    <li class="active" ng-model="currentView" btn-radio="'PlayList'"><a data-toggle="currentView">Current Playlist</a></li>
+	    <li class="active" ng-model="currentView" btn-radio="'PlayList'" ng-click="getPlaylist()"><a data-toggle="currentView">Current Playlist</a></li>
 	    <li ng-model="currentView" btn-radio="'Recent'" ng-click="getQueuedSongs()"><a data-toggle="currentView">Recently Played</a></li>
 	    <li ng-model="currentView" btn-radio="'Add'" class="navbar-right"><a data-toggle="currentView">Add a Song</a></li>
 	  </ul>
 	</div>
-	
+
 	<form>
 	  <div class="col-lg-8">
             <input ng-model="searchParam" type="text" class="form-control" placeholder="Search"/>
@@ -166,4 +168,3 @@
   </div>
 </div>
 </div>
-

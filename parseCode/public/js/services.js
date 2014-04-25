@@ -2,6 +2,8 @@
 angular.module('jukeServices', ['ngResource'])
     .factory('ParseService', function($resource, $http, $location){
 
+        var loaded = false;
+
 	//Init Parse
 	Parse.initialize("GU8DuOP6RzlnFFNBNOVnB5qrf6HCqxpJXSbDyN3W", "Wf6t36hyN7aPbkQzIxN6bXPMZGlr4xpdZgK1ljwG");
 
@@ -21,8 +23,25 @@ angular.module('jukeServices', ['ngResource'])
 	var Hub = Parse.Object.extend("Hub");
 	var QueuedSong = Parse.Object.extend("QueuedSong");
 
-	var ParseService = {
+        var ParseService = {
 	    name: "Parse",
+
+            getPlayer : function getPlayer(callback){
+                if(loaded){
+                    var player = new YT.Player('player', {
+                        videoId: '0gl8UKAYI7k'
+                    });
+                    callback(player);
+                } else {
+                    window.onYouTubeIframeAPIReady = function() {
+                        loaded = true;
+                        var player = new YT.Player('player', {
+                            videoId: '0gl8UKAYI7k'
+                        });
+                        callback(player);
+                    };
+                };
+            },
 
 	    //User
 	    //Login
@@ -138,12 +157,12 @@ angular.module('jukeServices', ['ngResource'])
 
 	    //Remove a song from the current playlist
 	    addSong : function addSong(userId, hubId, song){
-		return Parse.Cloud.run('addSong', {'userId' : 'userId', 'hubId' : 'hubId', 'song' : 'song'}, {
+		return Parse.Cloud.run('addSong', {'userId' : userId, 'hubId' : hubId, 'song' : song}, {
 		    success: function(result){
                         alert("Song successfully added");
 		    },
 		    error: function(error){
-			alert("Error: " + error.message);
+                        alert("Error: " + error.message);
 		    }
 		});
 	    },

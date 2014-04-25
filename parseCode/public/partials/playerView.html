@@ -1,3 +1,5 @@
+<script src="https://www.youtube.com/iframe_api" type="text/javascript"></script>
+
 <div class="navbar navbar-default ng-scope">
   <div class="container">
     <div class="navbar-header">
@@ -32,13 +34,13 @@
   </div>
 
   <div class="well">
-    <div align="center"> 
+    <div align="center">
       <div class="flex-video ">
 	<div id="player"></div>
       </div>
     </div>
   </div>
-  
+
   <div class="well">
     <div ng-show="currentView == 'PlayList'">
       <div class="row">
@@ -81,7 +83,7 @@
 		</td>
 		<td><img ng-src="{{queuedSong.get('song').get('thumbnail')}}"/></td>
 		<td>{{queuedSong.get('song').get('title')}}</td>
-		<td>{{queuedSong.get('submittedBy').substring(0, 25)}}</td>
+		<td>{{queuedSong.get('addedBy').get('username').substr(0, 25)}}</td>
               </tr>
             </tbody>
           </table>
@@ -122,12 +124,11 @@
       <div class="row">
         <h3>Add a Song</h3>
         <div>
-          <ul class="nav nav-tabs" style="margin-bottom: 15px;">
-	    <li ng-model="currentView" btn-radio="'PlayList'"><a data-toggle="currentView" ng-click="getPlaylist()">Current Playlist</a></li>
-            <li ng-model="currentView" btn-radio="'Recent'" ng-click="getRecentlyPlayed()"><a data-toggle="currentView">Recently Played</a></li>
-            <li ng-model="currentView" btn-radio="'Users'"><a data-toggle="currentView">Current Users</a></li>
-            <li class="active" ng-model="currentView" btn-radio="'Add'" class="navbar-right"><a data-toggle="currentView">Add a Song</a></li>
-	  </ul>
+        <ul class="nav nav-tabs" style="margin-bottom: 15px;">
+          <li ng-model="currentView" btn-radio="'PlayList'"><a ng-click="getPlaylist()" data-toggle="currentView">Current Playlist</a></li>
+          <li class="active" ng-model="currentView" btn-radio="'Recent'"><a data-toggle="currentView">Recently Played</a></li>
+          <li ng-model="currentView" btn-radio="'Add'" class="navbar-right"><a data-toggle="currentView">Add a Song</a></li>
+        </ul>
         </div>
 
         <form>
@@ -159,5 +160,3 @@
   </div>
 </div>
 </div>
-
-

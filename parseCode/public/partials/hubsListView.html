@@ -37,7 +37,7 @@
     <br>
     <div class="row">
       <div class="table-responsive">
-	<table ng-table="tableParams" class="table table-stripped table-hover">
+	<table  class="table table-stripped table-hover">
 	  <thead>
 	    <tr>
 	      <th>Name</th>
@@ -47,7 +47,7 @@
 	    </tr>
 	  </thead>
 	  <tbody>
-	    <tr ng-repeat="hub in hubs | filter:query" ng-click="connectToHub(hub)">
+	    <tr ng-repeat="hub in hubs | filter:query" ng-click="connectToHub(hub)" class="{{getColor($index)}}">
 	      <td><h5>{{hub.get('title')}}</h5></td>
 	      <td><h5>{{hub.get('owner').get('username')}}</h5></td>
 	      <td>{{hub.address}}</td>

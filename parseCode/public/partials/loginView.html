@@ -1,0 +1,91 @@
+<div class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+	<span class="icon-bar"></span>
+	<span class="icon-bar"></span>
+	<span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="http://makowaredev.com">MakoWare</a>
+    </div>
+    <div class="navbar-collapse collapse navbar-inverse-collapse">
+      <form name="loginForm" class="navbar-form navbar-right ng-pristine ng-invalid-required ng-invalid" novalidate="">
+	<input type="text" class="form-control col-lg-8 ng-pristine ng-invalid-required ng-invalid" style="margin: 5px;" placeholder="username" ng-model="login.username" required="">
+	<input type="password" class="form-control col-lg-8 ng-pristine ng-invalid-required ng-invalid" style="margin: 5px;" placeholder="password" ng-model="login.password" required="">
+	<button type="submit" class="btn btn-default" ng-click="login()" ng-disabled="loginForm.$invalid" style="margin: 5px;" disabled="disabled">Login</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row" id="mobileContent">
+    <div class="alert alert-warning" style="text-align: center">Try our mobile version in the app stores</div>
+  </div>
+
+  <div class="jumbotron">
+    <div class="row">
+      <div class="col-xs-4">
+        <h1>Juke</h1>
+        <p>Democratic Playlists</p>
+        <p><a href="#/about"><button class="btn btn-primary btn-lg">Learn more</button></a></p>
+      </div>
+      <div class="col-xs-3 col-xs-offset-2" id="desktopContent">
+        <img src="../images/screenshotHubView.png" alt="screenshot" class="img-responsive ">
+      </div>
+      <div class="col-xs-2" id="desktopContent">
+        <br>
+        <br>
+        <br>
+        <a href="https://itunes.apple.com/us/app/juke-democratic-playlists/id852959492?ls=1&mt=8"><img src="../images/appStore.png" alt="appStore" width="100%"></a>
+        <br>
+        <br>
+        <img src="../images/playStore.png" alt="playStore" width="100%">
+        <h5 style="margin-left: 13px;" >comming soon!</h5>
+      </div>
+    </div>
+  </div>
+
+  <div class="well">
+    <form name="signUpForm" class="form-inline ng-pristine ng-invalid ng-invalid-required" novalidate="">
+	<legend>Sign Up</legend>
+	<div class="row">
+	  <div class="form-group">
+	    <input type="username" ng-model="signUp_username" class="form-control ng-pristine ng-invalid ng-invalid-required" id="username" placeholder="Username" name="username" required="">
+	  </div>
+	  <div class="form-group">
+	    <input type="text" class="form-control"  id="email" placeholder="Email" name="email" ng-model="signUp_email" required="">
+	  </div>
+	  <div class="form-group">
+	    <input type="password" class="form-control" id="password" placeholder="Password" name="password" ng-model="signUp_password" required="">
+	  </div>
+	  <button ng-click="signUp()" type="submit" class="btn btn-primary" ng-disabled="signUpForm.$invalid" disabled="disabled">Submit</button>
+
+          <button data-toggle="modal" data-target="#myModal" class="btn btn-link">forget your password?</button>
+	</div>
+        <br>
+    </form>
+  </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Password Reset</h3>
+      </div>
+      <div class="modal-body">
+        <form name="form" novalidate="">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" ng-model="emailReset" class="form-control" id="emailReset" placeholder="Email" name="email" required="">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="resetPassword()" data-dismiss="modal"  ng-disabled="form.$invalid">Reset</button>
+        <button class="btn btn-warning" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

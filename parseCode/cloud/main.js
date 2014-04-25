@@ -1,5 +1,6 @@
 var User = Parse.Object.extend("User");
 var Hub = Parse.Object.extend("Hub");
+var Song = Parse.Object.extend("Song");
 var QueuedSong = Parse.Object.extend("QueuedSong");
 
 //Get PlayList
@@ -12,6 +13,7 @@ Parse.Cloud.define("getPlaylist", function(request, response) {
 	    query.limit(1000);
 	    query.include('song');
 	    query.include('hub');
+	    query.include('addedBy');
 	    query.equalTo('hub', hub);
 	    query.equalTo('active', true);
 	    query.ascending('updatedAt');
@@ -202,12 +204,11 @@ Parse.Cloud.define("addSong", function(request, response) {
     var hub = {};
     var user = {};
 
-
     //First get the hub and the user
     var hubQuery = new Parse.Query(Hub);
     var hubPromise = hubQuery.get(hubId, {
         success: function(result){
-            var user = result;
+            hub = result;
         },
         error: function(error){
             response.error(error);
@@ -217,7 +218,7 @@ Parse.Cloud.define("addSong", function(request, response) {
     var userQuery = new Parse.Query(User);
     var userPromise = userQuery.get(userId, {
         success: function(result){
-            var hub = result;
+            user = result;
         },
         error: function(error){
             response.error(error);
@@ -230,6 +231,7 @@ Parse.Cloud.define("addSong", function(request, response) {
         if(addCheck(hub, user, song)){
             var song = new Song();
             song.set('artist',submittedSong.artist);
+            song.set('title',submittedSong.title);
             song.set('description',submittedSong.description);
             song.set('thumbnail',submittedSong.thumbnail);
             song.set('type',submittedSong.type);
@@ -268,7 +270,7 @@ Parse.Cloud.define("addSong", function(request, response) {
 var addCheck = function(hub, user, song){
     var valid = true;
     return valid;
-}
+};
 
 
 
